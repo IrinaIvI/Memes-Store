@@ -12,14 +12,18 @@ async def get_all_memes(db: AsyncSession) -> List[MemeScheme]:
         result = await db.execute(select(Meme))
         memes = result.scalars().all()
 
-        response = [
-            {
-                "id": meme.id,
-                "title": meme.title,
-                "image_url": meme.image_url,
-            }
-            for meme in memes
-        ]
+        if memes:
+
+            response = [
+                {
+                    "id": meme.id,
+                    "title": meme.title,
+                    "image_url": meme.image_url,
+                }
+                for meme in memes
+            ]
+        else:
+            return "There is no any meme"
 
     except Exception as e:
         raise HTTPException(status_code=500, detail=f'{e}')
