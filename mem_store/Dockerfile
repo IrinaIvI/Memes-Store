@@ -13,6 +13,7 @@ RUN pip install poetry && poetry install --no-dev --no-interaction --no-ansi -vv
 COPY ./src /app
 
 RUN mc alias set minio http://minio:9000 minioadmin minioadmin && \
-    mc mb minio/memes || true
+     until mc alias ls minio; do echo "Waiting for MinIO..."; sleep 5; done && \
+     mc mb minio/memes || true
 
 ENTRYPOINT ["bash", "-c", "poetry run uvicorn app.main:app --host 0.0.0.0 --port 8001"]
