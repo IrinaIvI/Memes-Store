@@ -43,4 +43,16 @@ async def post_meme(db: AsyncSession) -> str: # нужна картинка и �
     pass
 
 async def delete_meme(db: AsyncSession, id: int) -> None:
-    pass
+    try:
+        result = await db.execute(select(Meme).where(Meme.id == id))
+        meme = result.scalars().first()
+
+        if meme:
+            await db.delete(meme)
+            await db.commit()
+        else:
+            raise HTTPException(status_code=404, detail="Meme not found")
+    except Exception as e:
+
+        await db.rollback()
+        raise HTTPException(status_code=500, detail=f'{e}')
