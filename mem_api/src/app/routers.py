@@ -7,14 +7,10 @@ from .schemas import MemeScheme
 
 router = APIRouter(prefix='/memes')
 
-@router.get('/', response_model=Union[List[MemeScheme], str])
+@router.get('/', response_model=Union[list[MemeScheme], str])
 async def route_get_all_memes(db: Annotated[AsyncSession, Depends(get_db)]):
     return await get_all_memes(db=db)
 
 @router.get('/{id}', response_model=MemeScheme)
 async def route_get_meme(id: int, db: Annotated[AsyncSession, Depends(get_db)]):
     return await get_meme(db=db, id=id)
-
-@router.get('/')
-async def hello():
-    return {'msg': 'Hello'}
