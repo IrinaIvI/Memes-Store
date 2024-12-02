@@ -1,0 +1,19 @@
+[tool.poetry]
+name = "mem-api"
+version = "0.1.0"
+description = ""
+authors = ["Ira <ira.ivashko.99@gmail.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "3.13"
+fastapi = "^0.115.5"
+alembic = "^1.14.0"
+pytest = "^8.3.4"
+sqlalchemy = "^2.0.36"
+pydantic = "^2.10.2"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
