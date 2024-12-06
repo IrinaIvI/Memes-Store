@@ -6,7 +6,7 @@ authors = ["Ira <ira.ivashko.99@gmail.com>"]
 readme = "README.md"
 
 [tool.poetry.dependencies]
-python = "3.13"
+python = "^3.12"
 fastapi = "^0.115.5"
 pytest = "^8.3.4"
 sqlalchemy = "^2.0.36"
@@ -15,6 +15,7 @@ asyncpg = "^0.30.0"
 alembic = "^1.14.0"
 greenlet = "^3.1.1"
 uvicorn = "^0.32.1"
+httpx = "^0.28.0"
 
 
 [build-system]
