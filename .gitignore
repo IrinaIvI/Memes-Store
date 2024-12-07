@@ -10,6 +10,7 @@ venv.bak/
 *.egg-info/
 dist/
 build/
+.pytest*
 
 # VS Code
 .vscode/
