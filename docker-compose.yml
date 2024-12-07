@@ -1,22 +1,19 @@
 services:
   postgres:
     image: postgres:17
-    container_name: postgres
-    ports:
-      - "5432:5432"
     environment:
-      POSTGRES_USER: postgres
       POSTGRES_PASSWORD: password
-      POSTGRES_DB: mem_db
     volumes:
       - postgres_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
 
   minio:
     image: quay.io/minio/minio
     container_name: minio
     ports:
       - "9000:9000"
-      - "9001:9001"  # для панели управления
+      - "9001:9001"  
     environment:
       MINIO_ROOT_USER: minioadmin
       MINIO_ROOT_PASSWORD: minioadmin
@@ -28,17 +25,19 @@ services:
     build:
       context: ./mem_api
       dockerfile: Dockerfile
+    env_file:
+      -  ./mem_api/.env
     container_name: mem_api
     ports:
       - "8000:8000"
     depends_on:
       - postgres
       - minio
-    environment:
-      DATABASE_URL: postgresql://myuser:mypassword@postgres:5432/memesdb
-      MINIO_URL: http://minio:9000
-      MINIO_ACCESS_KEY: minioadmin
-      MINIO_SECRET_KEY: minioadmin
+    # environment:
+    #   DATABASE_URL: postgresql://myuser:mypassword@postgres:5432/memesdb
+    #   MINIO_URL: http://minio:9000
+    #   MINIO_ACCESS_KEY: minioadmin
+    #   MINIO_SECRET_KEY: minioadmin
 
   mem_store:
     build:
