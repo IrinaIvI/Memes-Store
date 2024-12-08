@@ -7,6 +7,9 @@ from .schemas import MemeScheme
 from .models import Meme
 from typing import List
 import httpx
+import logging
+
+logging.basicConfig(level=logging.INFO)
 
 async def get_all_memes(db: AsyncSession) -> List[MemeScheme]:
     try:
@@ -44,13 +47,13 @@ async def get_meme(db: AsyncSession, id: int) -> MemeScheme:
     except Exception as e:
         raise HTTPException(status_code=500, detail=f'{e}')
     
-async def post_meme(db: AsyncSession, text: str, file: UploadFile = File(...)) -> str:
+async def post_meme(db: AsyncSession, text: str, file: UploadFile = File(...)) -> any:
     try:
         file_content = await file.read()
         files = {'photo': (file.filename, file_content, file.content_type)}
         
         response = await handle_request(
-            url='http://auth-service:8001/mem_store/upload_file',
+            url='http://mem_store:8001/mem_store/upload_file',
             parameters={},  
             files=files,
             request_type="POST",
@@ -60,9 +63,9 @@ async def post_meme(db: AsyncSession, text: str, file: UploadFile = File(...)) -
             raise HTTPException(status_code=response.status_code, 
                                 detail="Failed to upload the file to external service")
     
-        file_url = response.json().get("file_url") 
+        file_url = response.get("file_url") 
     
-        new_meme = Meme(text=text, image_url=file_url)
+        new_meme = Meme(title=text, image_url=file_url)
         
         db.add(new_meme)
         await db.commit()

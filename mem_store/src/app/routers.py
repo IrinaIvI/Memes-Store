@@ -3,7 +3,7 @@ from fastapi.responses import JSONResponse
 from io import BytesIO
 from .minio_client import upload_file
 
-router = APIRouter(prefix='api_store')
+router = APIRouter(prefix='/api_store')
 
 @router.post("/upload/")
 async def upload_meme(file: UploadFile):

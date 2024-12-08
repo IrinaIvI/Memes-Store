@@ -2,7 +2,7 @@ services:
   postgres:
     image: postgres:17
     environment:
-      POSTGRES_PASSWORD: password
+      POSTGRES_PASSWORD: ${PASSWORD}
     volumes:
       - postgres_data:/var/lib/postgresql/data
     ports:
@@ -15,8 +15,8 @@ services:
       - "9000:9000"
       - "9001:9001"  
     environment:
-      MINIO_ROOT_USER: minioadmin
-      MINIO_ROOT_PASSWORD: minioadmin
+      MINIO_ROOT_USER: minioaccesskey
+      MINIO_ROOT_PASSWORD: miniosecretkey
     command: server /data --console-address ":9001"
     volumes:
       - minio_data:/data
@@ -33,11 +33,6 @@ services:
     depends_on:
       - postgres
       - minio
-    # environment:
-    #   DATABASE_URL: postgresql://myuser:mypassword@postgres:5432/memesdb
-    #   MINIO_URL: http://minio:9000
-    #   MINIO_ACCESS_KEY: minioadmin
-    #   MINIO_SECRET_KEY: minioadmin
 
   mem_store:
     build:
@@ -48,10 +43,6 @@ services:
       - "8001:8001"
     depends_on:
       - minio
-    environment:
-      MINIO_URL: http://minio:9000
-      MINIO_ACCESS_KEY: minioadmin
-      MINIO_SECRET_KEY: minioadmin
 
 volumes:
   postgres_data:
